@@ -1,6 +1,6 @@
 #include "../include/complex.h"
 
-const Complex i = {0.0, 1.0}; // Constante imaginária i
+const Complex I = {0.0, 1.0}; // Constante imaginária i
 
 // Cria um novo número complexo
 Complex complex_new(double re, double im){ // Parte real (re) e imaginária (im)
