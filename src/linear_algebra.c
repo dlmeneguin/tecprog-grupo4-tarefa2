@@ -37,6 +37,50 @@ void free_matrix(Matrix *address){
     return;
 }
 
+/* Utilitários */
+// Faz uma deep copy de uma matriz
+Matrix copy_matrix(Matrix a){
+    Matrix resultado = {NULL, 0, 0};
+    if (a.values == NULL || a.rlen <= 0 || a.clen <= 0) {
+            return resultado;
+    }
+
+    int m = a.rlen;
+    int n = a.clen;
+
+    //Aloca o array externo da matriz
+    resultado.values = malloc(m * sizeof *resultado.values);
+    if (resultado.values == NULL) { 
+        return resultado; //Verifica se o malloc funcionou
+    }
+
+    //Aloca as arrays internas da matriz
+    for (int i = 0; i < m; i++){
+        resultado.values[i] = malloc(n * sizeof *resultado.values[i]);
+        //Verifica se o malloc funcionou, caso não, libera memória previamente alocada
+        if (resultado.values[i] == NULL){
+            while (i > 0){ //faz um "backtracking" dos arrays internos alocados e libera
+                i--;
+                free(resultado.values[i]);
+            }
+            free(resultado.values); //libera as arryas externas
+            resultado.values = NULL;
+            return resultado;
+        }
+    }
+
+    resultado.rlen = m;
+    resultado.clen = n;
+
+    //Copia os elementos
+    for (int i = 0; i < m; i++){
+        for (int j = 0; j < n; j++){
+            resultado.values[i][j] = a.values[i][j];
+        }
+    }
+
+    return resultado;
+}
 
 /* Operações */
 // Cria um vetor com 2^n entradas, uma para cada combinação possível de n bits
@@ -83,7 +127,7 @@ Matrix tensor_product_matrix(Matrix a, Matrix b){
     if (result.values == NULL) return result;
 
     for (int i = 0; i < m*p; i++){
-        result.values[i] = calloc((n * q), sizeof result.values[i]);
+        result.values[i] = calloc((n * q), sizeof *result.values[i]);
 
         // Libera as linhas que já foram preenchidas e o espaço alocado para os ponteiros de linha
         if (result.values[i] == NULL){
@@ -113,6 +157,17 @@ Matrix tensor_product_matrix(Matrix a, Matrix b){
     return result;
 }
 
+Matrix matrix_scale_mul(Matrix a, Complex alfa){
+    // Multiplica cada elemento pelo escalar usando complex_mul
+        for (int i = 0; i < a.rlen; i++) {
+            for (int j = 0; j < a.clen; j++) {
+                a.values[i][j] = complex_mul(a.values[i][j], alfa);
+            }
+        }
+
+        return a;
+}
+
 // Realiza o produto entre 2 matrizes
 Matrix matrix_mul(Matrix a, Matrix b){
     int m = a.rlen;
@@ -133,7 +188,7 @@ Matrix matrix_mul(Matrix a, Matrix b){
     if (result.values == NULL) return result;
 
     for (int i = 0; i < m*p; i++){
-        result.values[i] = calloc((n * q), sizeof result.values[i]);
+        result.values[i] = calloc((n * q), sizeof *result.values[i]);
 
         // Libera as linhas que já foram preenchidas e o espaço alocado para os ponteiros de linha
         if (result.values[i] == NULL){

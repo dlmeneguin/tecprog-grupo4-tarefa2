@@ -6,6 +6,8 @@ typedef struct {
     double im; // Parte imaginária
 } Complex; // Nome do struct de números complexos
 
+extern const Complex I;
+
 Complex complex_new(double re, double im); // Construtor do número complexo
 Complex complex_add(Complex a, Complex b); // Função de adição de números complexos (soma e subtração)
 Complex complex_mul(Complex a, Complex b); // Função de multiplicação de números complexos
