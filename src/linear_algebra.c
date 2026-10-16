@@ -90,11 +90,9 @@ Vector create_vector(int n){
         return v;
     }
 
-    int vecSize = 1 << n;
-
-    v.values = calloc(vecSize, sizeof *v.values); // Inicializa o vetor com 0 em todas as entradas
+    v.values = calloc(n, sizeof *v.values); // Inicializa o vetor com 0 em todas as entradas
     if (v.values == NULL) return v;
-    v.len = vecSize;
+    v.len = n;
 
     return v;
 }
@@ -121,6 +119,7 @@ Matrix create_matrix(int r, int c){
             }
 
             free(A.values);
+            A.values = NULL;
             return A;
         }
     }
@@ -225,7 +224,7 @@ Vector matrix_vec_mul(Matrix a, Vector v){
         return result;
     }
 
-    result = create_vector(c);
+    result = create_vector(m);
 
     for (int i = 0; i < m; i++){
         for (int j = 0; j < n; j++){
