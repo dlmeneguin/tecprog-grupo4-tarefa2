@@ -30,12 +30,8 @@ Matrix get_identity(int n){
     if (n <= 0) return vazia;
 
     //Incializa a matriz identidade base
-    Matrix base = {NULL, 2, 2};
-    base.values = malloc(2 * sizeof *base.values); //Aloca a array externa da matriz
-
-    //Alocas as arrays internas da matriz
-    base.values[0] = calloc(2, sizeof *base.values[0]);
-    base.values[1] = calloc(2, sizeof *base.values[1]);
+    Matrix base = create_matrix(2, 2);
+    if (base.values == NULL) return vazia;
 
     //Define os valores da base 2x2
     base.values[0][0] = complex_new(1.0, 0.0); 
@@ -50,12 +46,8 @@ Matrix get_hadamard(int n){
     if (n <= 0) return vazia;
 
     //Incializa a matriz de hadamard base
-    Matrix base = {NULL, 2, 2};
-    base.values = malloc(2 * sizeof *base.values); //Aloca a array externa da matriz
-
-    //Alocas as arrays internas da matriz
-    base.values[0] = calloc(2, sizeof *base.values[0]);
-    base.values[1] = calloc(2, sizeof *base.values[1]);
+    Matrix base = create_matrix(2, 2);
+    if (base.values == NULL) return vazia;
 
     //Define os valores da matriz base 2x2
     base.values[0][0] = complex_new(1.0 / pow(2, 0.5), 0.0); 
@@ -72,12 +64,8 @@ Matrix get_rotateX(int n, float theta){
     if (n <= 0) return vazia;
 
     //Incializa a matriz de rotação no eixo X base
-    Matrix base = {NULL, 2, 2};
-    base.values = malloc(2 * sizeof *base.values); //Aloca a array externa da matriz
-
-    //Alocas as arrays internas da matriz
-    base.values[0] = calloc(2, sizeof *base.values[0]);
-    base.values[1] = calloc(2, sizeof *base.values[1]);
+    Matrix base = create_matrix(2, 2);
+    if (base.values == NULL) return vazia;
 
     //Define os valores da matriz base 2x2
     base.values[0][0] = complex_new(cos(theta/2), 0.0); 
@@ -94,6 +82,8 @@ Matrix get_pauliX(int n){
     if (n <= 0) return vazia;
 
     Matrix resultado = get_rotateX(n, M_PI);
+    if (resultado.values == NULL) return vazia;
+
     resultado = matrix_scale_mul(resultado, complex_exp(I, n));
     return resultado;
 }
@@ -103,12 +93,8 @@ Matrix get_rotateY(int n, float theta){
     if (n <= 0) return vazia;
 
     //Incializa a matriz de rotação no eixo Y base
-    Matrix base = {NULL, 2, 2};
-    base.values = malloc(2 * sizeof *base.values); //Aloca a array externa da matriz
-
-    //Alocas as arrays internas da matriz
-    base.values[0] = calloc(2, sizeof *base.values[0]);
-    base.values[1] = calloc(2, sizeof *base.values[1]);
+    Matrix base = create_matrix(2, 2);
+    if (base.values == NULL) return vazia;
 
     //Define os valores da matriz base 2x2
     base.values[0][0] = complex_new(cos(theta/2), 0.0); 
@@ -125,6 +111,8 @@ Matrix get_pauliY(int n){
     if (n <= 0) return vazia;
 
     Matrix resultado = get_rotateY(n, M_PI);
+    if (resultado.values == NULL) return vazia;
+
     resultado = matrix_scale_mul(resultado, complex_exp(I, n));
     return resultado;
 }
@@ -134,12 +122,8 @@ Matrix get_rotateZ(int n, float theta){
     if (n <= 0) return vazia;
 
     //Incializa a matriz de rotação no eixo Z base
-    Matrix base = {NULL, 2, 2};
-    base.values = malloc(2 * sizeof *base.values); //Aloca a array externa da matriz
-
-    //Alocas as arrays internas da matriz
-    base.values[0] = calloc(2, sizeof *base.values[0]);
-    base.values[1] = calloc(2, sizeof *base.values[1]);
+    Matrix base = create_matrix(2, 2);
+    if (base.values == NULL) return vazia;
 
     //Define os valores da matriz base 2x2
     base.values[0][0] = complex_new(cos(theta / 2), -sin(theta / 2)); 
@@ -156,6 +140,8 @@ Matrix get_pauliZ(int n){
     if (n <= 0) return vazia;
 
     Matrix resultado = get_rotateZ(n, M_PI);
+    if (resultado.values == NULL) return vazia;
+
     resultado = matrix_scale_mul(resultado, complex_exp(I, n));
     return resultado;
 }
