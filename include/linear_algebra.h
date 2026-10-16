@@ -43,12 +43,21 @@ void free_matrix(Matrix *address);
 Matrix copy_matrix(Matrix a);
 
 /**
- * @brief Cria um vetor com 2^n entradas, uma para cada combinação possível de n bits.
- * @param n Número de bits do vetor.
+ * @brief Cria um vetor de tamanho n.
+ * @param n Tamanho do vetor.
  * @return Novo objeto Vector com todas as entradas zeradas.
- * @pre n deve ser não-negativo.
+ * @pre n deve ser positivo.
 */
 Vector create_vector(int n);
+
+/**
+ * @brief Cria uma matriz de tamanho r x c.
+ * @param r Número de linhas.
+ * @param c Número de colunas.
+ * @return Novo objeto Matrix com todas as entradas zeradas.
+ * @pre r e c devem ser positivos.
+*/
+Matrix create_matrix(int r, int c);
 
 /**
  * @brief Realiza o produto tensorial entre dois vetores.
@@ -80,6 +89,7 @@ Matrix matrix_scale_mul(Matrix a, Complex alfa);
  * @param a Primeiro termo(matriz) do produto matricial.
  * @param b Segundo termo(matriz) do produto matricial.
  * @return Objeto Matrix resultado do produto matricial.
+ * @pre a.clen = b.rlen.
 */
 Matrix matrix_mul(Matrix a, Matrix b);
 
@@ -88,6 +98,7 @@ Matrix matrix_mul(Matrix a, Matrix b);
  * @param a Matriz que será multiplicada.
  * @param v Vetor que multiplicará a matriz.
  * @return Objeto vector resultado do produto matriz-vetor.
+ * @pre a.clen = v.len.
 */
 Vector matrix_vec_mul(Matrix a, Vector v);
 

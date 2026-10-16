@@ -1,6 +1,5 @@
 /* Bibliotecas usadas */
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
 
 /* Header do módulo */
@@ -83,11 +82,15 @@ Matrix copy_matrix(Matrix a){
 }
 
 /* Operações */
-// Cria um vetor com 2^n entradas, uma para cada combinação possível de n bits
+// Cria um vetor de tamanho n
 Vector create_vector(int n){
-    int vecSize = 1 << n;
-
     Vector v = {NULL, 0};
+    if (n <= 0){
+        printf("ERRO: n deve ser positivo\n");
+        return v;
+    }
+
+    int vecSize = 1 << n;
 
     v.values = calloc(vecSize, sizeof *v.values); // Inicializa o vetor com 0 em todas as entradas
     if (v.values == NULL) return v;
@@ -96,13 +99,41 @@ Vector create_vector(int n){
     return v;
 }
 
+// Cria uma matriz de tamanho r x c
+Matrix create_matrix(int r, int c){
+    Matrix A = {NULL, 0, 0};
+    if (r <= 0 || c <= 0){
+        printf("ERRO: r e c devem ser positivos\n");
+        return A;
+    }
+
+    A.values = malloc(r * sizeof *A.values);
+    if (A.values == NULL) return A;
+
+    for (int i = 0; i < r; i++){
+        A.values[i] = calloc(c, sizeof *A.values[i]);
+
+        // Libera as linhas que já foram preenchidas e o espaço alocado para os ponteiros de linha
+        if (A.values[i] == NULL){
+            while (i != 0){
+                i--;
+                free(A.values[i]);
+            }
+
+            free(A.values);
+            return A;
+        }
+    }
+
+    A.rlen = r;
+    A.clen = c;
+
+    return A;
+}
+
 // Realiza o produto tensorial entre 2 vetores
 Vector tensor_product_vec(Vector a, Vector b){
-    Vector result = {NULL, 0};
-
-    result.values = calloc((a.len * b.len), sizeof *result.values);
-    if (result.values == NULL) return result;
-    result.len = a.len * b.len;
+    Vector result = create_vector(a.len * b.len);
 
     for (int i = 0; i < a.len; i++){
         for (int j = 0; j < b.len; j++){
@@ -121,28 +152,7 @@ Matrix tensor_product_matrix(Matrix a, Matrix b){
     int p = b.rlen;
     int q = b.clen;
 
-    Matrix result = {NULL, 0, 0};
-
-    result.values = malloc((m * p) * sizeof *result.values);
-    if (result.values == NULL) return result;
-
-    for (int i = 0; i < m*p; i++){
-        result.values[i] = calloc((n * q), sizeof *result.values[i]);
-
-        // Libera as linhas que já foram preenchidas e o espaço alocado para os ponteiros de linha
-        if (result.values[i] == NULL){
-            while (i != 0){
-                i--;
-                free(result.values[i]);
-            }
-
-            free(result.values);
-            return result;
-        }
-    }
-
-    result.rlen = m*p;
-    result.clen = n*q;
+    Matrix result = create_matrix(m * p, n * q);
 
     for (int ia = 0; ia < m; ia++){
         for (int ja = 0; ja < n; ja++){
@@ -157,15 +167,17 @@ Matrix tensor_product_matrix(Matrix a, Matrix b){
     return result;
 }
 
-Matrix matrix_scale_mul(Matrix a, Complex alfa){
+Matrix matrix_scale_mul(Matrix a, Complex alpha){
+    Matrix result = create_matrix(a.rlen, a.clen);
+
     // Multiplica cada elemento pelo escalar usando complex_mul
-        for (int i = 0; i < a.rlen; i++) {
-            for (int j = 0; j < a.clen; j++) {
-                a.values[i][j] = complex_mul(a.values[i][j], alfa);
+        for (int i = 0; i < result.rlen; i++) {
+            for (int j = 0; j < result.clen; j++) {
+                result.values[i][j] = complex_mul(a.values[i][j], alpha);
             }
         }
 
-        return a;
+    return result;
 }
 
 // Realiza o produto entre 2 matrizes
@@ -184,26 +196,7 @@ Matrix matrix_mul(Matrix a, Matrix b){
         return result;
     }
 
-    result.values = malloc((m * p) * sizeof *result.values);
-    if (result.values == NULL) return result;
-
-    for (int i = 0; i < m*p; i++){
-        result.values[i] = calloc((n * q), sizeof *result.values[i]);
-
-        // Libera as linhas que já foram preenchidas e o espaço alocado para os ponteiros de linha
-        if (result.values[i] == NULL){
-            while (i != 0){
-                i--;
-                free(result.values[i]);
-            }
-
-            free(result.values);
-            return result;
-        }
-    }
-
-    result.rlen = m;
-    result.clen = q;
+    result = create_matrix(m, q);
 
     for (int ia = 0; ia < m; ia++){
         for (int jb = 0; jb < q; jb++){
@@ -232,8 +225,7 @@ Vector matrix_vec_mul(Matrix a, Vector v){
         return result;
     }
 
-    result.values = malloc(m * sizeof *result.values);
-    if (result.values == NULL) return result;
+    result = create_vector(c);
 
     for (int i = 0; i < m; i++){
         for (int j = 0; j < n; j++){
