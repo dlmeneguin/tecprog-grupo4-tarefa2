@@ -1,3 +1,8 @@
+#ifndef gates_h // Condicional de pré-processamento
+#define gates_h // Inicio do pré-processamento
+
+#include "linear_algebra.h"
+
 /**
 * @brief Expande a matriz fornecida para a utilização em n qubits com tensor product
 * @param n Número de qubits que aquela porta será aplicada, expoente do 2 no tamanho da matriz (2^n x 2^n)
@@ -94,3 +99,5 @@ Matrix get_pauliZ(int n);
 * @note a função não libera a memória da matriz
 */
 Matrix get_cnot(int n, int control, int target);
+
+#endif
