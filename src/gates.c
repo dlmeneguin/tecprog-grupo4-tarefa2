@@ -84,7 +84,10 @@ Matrix get_pauliX(int n){
     Matrix resultado = get_rotateX(n, M_PI);
     if (resultado.values == NULL) return vazia;
 
-    resultado = matrix_scale_mul(resultado, complex_exp(I, n));
+    Matrix temp = matrix_scale_mul(resultado, complex_exp(I, n));
+    free_matrix(&resultado); //Evita vazamento de memória
+    resultado = temp;
+
     return resultado;
 }
 
@@ -113,7 +116,9 @@ Matrix get_pauliY(int n){
     Matrix resultado = get_rotateY(n, M_PI);
     if (resultado.values == NULL) return vazia;
 
-    resultado = matrix_scale_mul(resultado, complex_exp(I, n));
+    Matrix temp = matrix_scale_mul(resultado, complex_exp(I, n));
+    free_matrix(&resultado); //Evita vazamento de memória
+    resultado = temp;
     return resultado;
 }
 
@@ -142,7 +147,9 @@ Matrix get_pauliZ(int n){
     Matrix resultado = get_rotateZ(n, M_PI);
     if (resultado.values == NULL) return vazia;
 
-    resultado = matrix_scale_mul(resultado, complex_exp(I, n));
+    Matrix temp = matrix_scale_mul(resultado, complex_exp(I, n));
+    free_matrix(&resultado); //Evita vazamento de memória
+    resultado = temp;
     return resultado;
 }
 
