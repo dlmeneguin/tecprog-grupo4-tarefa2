@@ -91,7 +91,7 @@ Matrix get_pauliZ(int n);
 * @brief Retorna a matriz Controlled Not de tamanho (2^n x 2^n).
 * @param n número de qubits que essa porta será aplicada
 * @param control variável que define o indice do qubit de controle da porta
-* @param target variável que define o indice qubit alvo da porta
+* @param target variável que define o indice do qubit alvo da porta
 * @return objeto Matrix da matriz gerada
 * @pre n maior ou igual a 2
 * @pre control diferente de target
@@ -99,5 +99,47 @@ Matrix get_pauliZ(int n);
 * @note a função não libera a memória da matriz
 */
 Matrix get_cnot(int n, int control, int target);
+
+/**
+* @brief Retorna a matriz Controlled Z de tamanho (2^n x 2^n).
+* @param n número de qubits que essa porta será aplicada
+* @param control variável que define o indice do qubit de controle da porta
+* @param target variável que define o indice do qubit alvo da porta
+* @return objeto Matrix da matriz gerada
+* @pre n maior ou igual a 2
+* @pre control diferente de target
+* @pre 0 <= control < n e 0 <= target < n
+* @note a função não libera a memória da matriz
+*/
+Matrix get_cz(int n, int control, int target);
+
+/**
+* @brief Retorna a matriz Controlled Controlled Not de tamanho (2^n x 2^n).
+* @param n número de qubits que essa porta será aplicada
+* @param control1 variável que define o indice do primeiro qubit de controle da porta
+* @param control2 variável que define o indice do segundo qubit de controle da porta
+* @param target variável que define o indice do qubit alvo da porta
+* @return objeto Matrix da matriz gerada
+* @pre n maior ou igual a 3
+* @pre control1 diferente de control2 diferente de target
+* @pre 0 <= control1 < n, 0 <= control2 < n, 0 <= target < n
+* @note a função não libera a memória da matriz
+*/
+Matrix get_ccnot(int n, int control1, int control2, int target);
+
+/**
+* @brief Retorna a matriz Controlled Controlled Z de tamanho (2^n x 2^n).
+* @param n número de qubits que essa porta será aplicada
+* @param control1 variável que define o indice do primeiro qubit de controle da porta
+* @param control2 variável que define o indice do segundo qubit de controle da porta
+* @param target variável que define o indice do qubit alvo da porta
+* @return objeto Matrix da matriz gerada
+* @pre n maior ou igual a 3
+* @pre control1 diferente de control2 diferente de target
+* @pre 0 <= control1 < n, 0 <= control2 < n, 0 <= target < n
+* @note a função não libera a memória da matriz
+*/
+Matrix get_ccz(int n, int control1, int control2, int target);
+
 
 #endif
