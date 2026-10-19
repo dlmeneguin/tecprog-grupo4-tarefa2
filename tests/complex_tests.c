@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
-#include "../include/complex.h"
+#include "complex.h"
 
 //Função para verificar se os complexos são iguais na medida do possível, i.e.,
 // com margem de erro até a ordem de 1e-9. É análogo ao complex_equal em complex.c,

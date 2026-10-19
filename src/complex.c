@@ -1,4 +1,4 @@
-#include "../include/complex.h"
+#include "complex.h"
 
 const Complex I = {0.0, 1.0}; // Constante imaginária i
 

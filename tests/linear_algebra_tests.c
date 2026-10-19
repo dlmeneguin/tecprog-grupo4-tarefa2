@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/linear_algebra.h"
+#include "linear_algebra.h"
 
 int test_free_vector(){
     Vector v = create_vector(1);
@@ -88,7 +88,7 @@ int test_tensor_product_vec(){
     Vector v1 = create_vector(2);
     Vector v2 = create_vector(2);
     v1.values[0] = (Complex) {1, 0}; v1.values[1] = (Complex) {0, 1};
-    
+
     Vector result = tensor_product_vec(v1, v2);
 
     if (result.len != v1.len * v2.len){
@@ -156,7 +156,7 @@ int test_matrix_scale_mul(){
     A.values[1][1] = (Complex) {4, 3};
 
     Complex alpha = {2, 0};
-    
+
     Matrix result = matrix_scale_mul(A, alpha);
     if (result.rlen != A.rlen || result.clen != A.clen){
         free_matrix(&A);
