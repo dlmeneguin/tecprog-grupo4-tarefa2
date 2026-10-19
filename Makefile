@@ -7,11 +7,14 @@ LDLIBS = -lm
 # Destino do make install
 PREFIX ?= /usr/local
 
-# Listas dos arquivos existentes: SRCS (código-fonte dos módulos), TESTS_SRCS (código-fonte dos testes),
-# OBJS (código de máquina .o dos módulos), TESTS (executáveis dos testes)
+# Listas dos arquivos existentes: SRCS (código-fonte dos módulos), APP_SRCS (código-fonte do app),
+# TESTS_SRCS (código-fonte dos testes), OBJS e APP_OBJS (código de máquina .o dos módulos e do app),
+# TESTS (executáveis dos testes)
 SRCS       = $(wildcard src/*.c)
+APP_SRCS   = $(wildcard app/*.c)
 TESTS_SRCS = $(wildcard tests/*.c)
 OBJS       = $(SRCS:%.c=build/%.o)
+APP_OBJS   = $(APP_SRCS:%.c=build/%.o)
 TESTS      = $(TESTS_SRCS:%.c=build/%)
 
 # Nomes das bibliotecas estática e dinâmica
@@ -37,12 +40,12 @@ $(SHARED): $(OBJS)
 	gcc -shared -o $(SHARED) $(OBJS) $(LDLIBS)
 
 # Executável com a biblioteca copiada para dentro dele
-bin/app_static: build/app/main.o $(STATIC)
-	gcc build/app/main.o $(STATIC) -o bin/app_static $(LDLIBS)
+bin/app_static: $(APP_OBJS) $(STATIC)
+	gcc $(APP_OBJS) $(STATIC) -o bin/app_static $(LDLIBS)
 
 # rpath: o executável procura a .so em ../lib (relativo a ele mesmo)
-bin/app_shared: build/app/main.o $(SHARED)
-	gcc build/app/main.o -Llib -l$(LIBS) -Wl,-rpath,'$$ORIGIN/../lib' -o bin/app_shared $(LDLIBS)
+bin/app_shared: $(APP_OBJS) $(SHARED)
+	gcc $(APP_OBJS) -Llib -l$(LIBS) -Wl,-rpath,'$$ORIGIN/../lib' -o bin/app_shared $(LDLIBS)
 
 # Roda o app com a biblioteca estática e dinâmica
 run: all
