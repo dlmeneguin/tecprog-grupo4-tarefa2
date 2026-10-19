@@ -36,7 +36,7 @@ Vector init_qubits(int n) {
 
 // Aplica uma porta (matriz) a um estado
 void apply_gate(Vector *s, Matrix gate) {
-    if (s->values == NULL || s == NULL || gate.values == NULL){
+    if (s == NULL || s->values == NULL || gate.values == NULL){
         if (gate.values != NULL) free_matrix(&gate);
         return;
     }
@@ -63,7 +63,7 @@ void apply_gate(Vector *s, Matrix gate) {
 
 // Mede o estado sem colapsá-lo, retornando o índice do estado base observado
 int measure(const Vector *s) {
-    if (s->values == NULL) return -1;
+    if (s == NULL || s->values == NULL) return -1;
 
     // Sorteia r em [0, 1)
     // Como 0 <= rand() <= RAND_MAX, dividir por RAND_MAX +1 garante que r < 1
@@ -89,7 +89,7 @@ int measure(const Vector *s) {
 }
 
 int *measure_shots(const Vector *state, int shots){
-    if (state->values == NULL || shots < 0) return NULL;
+    if (state == NULL || state->values == NULL || shots < 0) return NULL;
 
     int *result = calloc(state->len, sizeof(int));
     if (result == NULL) return NULL;
