@@ -103,7 +103,7 @@ int *measure_shots(const Vector *state, int shots){
         }
 
         // No índice do shot atual, soma o que foi medido
-        result[i] += measured;
+        result[measured]++;
     }
     
     return result;

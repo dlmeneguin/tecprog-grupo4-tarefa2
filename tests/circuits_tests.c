@@ -199,7 +199,11 @@ void test_measure(void) {
     free_vector(&s);
 }
 
+// Teste que falhava inicialmente: measure_shots somava o índice do estado medido (result[i] += measured)
+// ao invés de incrementar a contagem do estado medido (result[measured]++)
 
+// Com |1> e 2 shots, o resultado esperado é {0, 2}, mas a versão com erro retornava {1, 1}; além disso,
+// como i podia ser maior que o comprimento do vetor de estados, poderia haver extrapolamento do limite do vetor
 void test_measure_shots_regression() {
     srand(42);
  
