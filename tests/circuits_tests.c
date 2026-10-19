@@ -274,21 +274,21 @@ int main() {
     printf("Iniciando os testes do módulo de circuitos quânticos\n");
  
     test_generate_seed();
-    printf("função generate_seed funcionando corretamente\n");
+    printf("função generate_seed OK\n");
  
     test_init_qubits();
-    printf("função init_qubits funcionando corretamente\n");
+    printf("função init_qubits OK\n");
  
     test_apply_gate();
     test_apply_gate_invalid();
-    printf("função apply_gate funcionando corretamente\n");
+    printf("função apply_gate OK\n");
  
     test_measure();
-    printf("função measure funcionando corretamente\n");
+    printf("função measure OK\n");
  
     test_measure_shots_regression();
     test_measure_shots();
-    printf("função measure_shots funcionando corretamente\n");
+    printf("função measure_shots OK\n");
  
     printf("\nTodos os testes do módulo de circuitos quânticos passaram!\n");
     return 0;

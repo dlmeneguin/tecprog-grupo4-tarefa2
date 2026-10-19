@@ -355,6 +355,221 @@ void test_get_cnot(void){
     free_matrix(&expected);
 }
 
+void test_get_cz(void){
+    //Casos inválidos, n <= 1
+    Matrix resultado = get_cz(1, 0, 1);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_cz(0, 0, 1);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    //Caso inválido, control == target
+    resultado = get_cz(2, 0, 0);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    //Casos inválidos, índices fora dos limites
+    resultado = get_cz(2, -1, 1);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_cz(2, 0, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_cz(2, 2, 0);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    //Caso base, n = 2, control = 0, target = 1
+    Matrix expected = create_matrix(4, 4);
+    expected.values[0][0] = complex_new(1.0, 0.0);
+    expected.values[1][1] = complex_new(1.0, 0.0);
+    expected.values[2][2] = complex_new(1.0, 0.0);
+    expected.values[3][3] = complex_new(-1.0, 0.0);
+
+    resultado = get_cz(2, 0, 1);
+    assert(check_matrix(resultado, expected) == 1);
+    free_matrix(&resultado);
+    free_matrix(&expected);
+
+    //Caso base, n = 2, control = 1, target = 0
+    expected = create_matrix(4, 4);
+    expected.values[0][0] = complex_new(1.0, 0.0);
+    expected.values[1][1] = complex_new(1.0, 0.0);
+    expected.values[2][2] = complex_new(1.0, 0.0);
+    expected.values[3][3] = complex_new(-1.0, 0.0);
+
+    resultado = get_cz(2, 1, 0);
+    assert(check_matrix(resultado, expected) == 1);
+    free_matrix(&resultado);
+    free_matrix(&expected);
+
+    //Caso genérico, n = 3, control = 0, target = 2
+    expected = create_matrix(8, 8);
+    for (int i = 0; i < 8; i++) {
+        expected.values[i][i] = complex_new(1.0, 0.0);
+    }
+    expected.values[5][5] = complex_new(-1.0, 0.0);
+    expected.values[7][7] = complex_new(-1.0, 0.0);
+
+    resultado = get_cz(3, 0, 2);
+    assert(check_matrix(resultado, expected) == 1);
+    free_matrix(&resultado);
+    free_matrix(&expected);
+}
+
+void test_get_ccnot(void){
+    //Casos inválidos, n <= 2
+    Matrix resultado = get_ccnot(2, 0, 1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccnot(0, 0, 1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    //Casos inválidos, qubits iguais
+    resultado = get_ccnot(3, 0, 0, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccnot(3, 0, 1, 0);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccnot(3, 0, 1, 1);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    //Casos inválidos, índices fora dos limites
+    resultado = get_ccnot(3, -1, 1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccnot(3, 0, -1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccnot(3, 0, 1, -1);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccnot(3, 3, 1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccnot(3, 0, 3, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccnot(3, 0, 1, 3);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    //Caso base, n = 3, control1 = 0, control2 = 1, target = 2
+    Matrix expected = create_matrix(8, 8);
+    for (int i = 0; i < 6; i++) {
+        expected.values[i][i] = complex_new(1.0, 0.0);
+    }
+    expected.values[6][7] = complex_new(1.0, 0.0);
+    expected.values[7][6] = complex_new(1.0, 0.0);
+
+    resultado = get_ccnot(3, 0, 1, 2);
+    assert(check_matrix(resultado, expected) == 1);
+    free_matrix(&resultado);
+    free_matrix(&expected);
+
+    //Caso base, n = 3, control1 = 0, control2 = 2, target = 1
+    expected = create_matrix(8, 8);
+    for (int i = 0; i < 5; i++) {
+        expected.values[i][i] = complex_new(1.0, 0.0);
+    }
+    expected.values[6][6] = complex_new(1.0, 0.0);
+    expected.values[5][7] = complex_new(1.0, 0.0);
+    expected.values[7][5] = complex_new(1.0, 0.0);
+
+    resultado = get_ccnot(3, 0, 2, 1);
+    assert(check_matrix(resultado, expected) == 1);
+    free_matrix(&resultado);
+    free_matrix(&expected);
+}
+
+void test_get_ccz(void){
+    //Casos inválidos, n <= 2
+    Matrix resultado = get_ccz(2, 0, 1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccz(0, 0, 1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    //Casos inválidos, qubits iguais
+    resultado = get_ccz(3, 0, 0, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccz(3, 0, 1, 0);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccz(3, 0, 1, 1);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    //Casos inválidos, índices fora dos limites
+    resultado = get_ccz(3, -1, 1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccz(3, 0, -1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccz(3, 0, 1, -1);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccz(3, 3, 1, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccz(3, 0, 3, 2);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    resultado = get_ccz(3, 0, 1, 3);
+    assert(resultado.values == NULL);
+    free_matrix(&resultado);
+
+    //Caso base, n = 3, control1 = 0, control2 = 1, target = 2
+    Matrix expected = create_matrix(8, 8);
+    for (int i = 0; i < 7; i++) {
+        expected.values[i][i] = complex_new(1.0, 0.0);
+    }
+    expected.values[7][7] = complex_new(-1.0, 0.0);
+
+    resultado = get_ccz(3, 0, 1, 2);
+    assert(check_matrix(resultado, expected) == 1);
+    free_matrix(&resultado);
+    free_matrix(&expected);
+
+    //Caso base, n = 3, control1 = 1, control2 = 2, target = 0
+    expected = create_matrix(8, 8);
+    for (int i = 0; i < 7; i++) {
+        expected.values[i][i] = complex_new(1.0, 0.0);
+    }
+    expected.values[7][7] = complex_new(-1.0, 0.0);
+
+    resultado = get_ccz(3, 1, 2, 0);
+    assert(check_matrix(resultado, expected) == 1);
+    free_matrix(&resultado);
+    free_matrix(&expected);
+}
+
 int main(void){
     printf("Iniciando os testes do módulo de portas quânticas\n");
 
@@ -387,6 +602,15 @@ int main(void){
 
     test_get_cnot();
     printf("função get_cnot OK\n");
+
+    test_get_cz();
+    printf("função get_cz OK\n");
+
+    test_get_ccnot();
+    printf("função get_ccnot OK\n");
+
+    test_get_ccz();
+    printf("função get_ccz OK\n");
 
     printf("\nTodos os testes do módulo de portas quânticas passaram\n");
     return 0;
