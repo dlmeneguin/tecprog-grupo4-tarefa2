@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /* Header do módulo */
-#include "../include/linear_algebra.h"
+#include "linear_algebra.h"
 
 /* Facilita a liberação da memória para o cliente */
 void free_vector(Vector *address){
@@ -49,7 +49,7 @@ Matrix copy_matrix(Matrix a){
 
     //Aloca o array externo da matriz
     resultado.values = malloc(m * sizeof *resultado.values);
-    if (resultado.values == NULL) { 
+    if (resultado.values == NULL) {
         return resultado; //Verifica se o malloc funcionou
     }
 

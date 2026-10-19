@@ -2,10 +2,10 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/complex.h"
-#include "../include/linear_algebra.h"
-#include "../include/gates.h"
-#include "../include/circuits.h"
+#include "complex.h"
+#include "linear_algebra.h"
+#include "gates.h"
+#include "circuits.h"
 
 // Define a seed para o random
 void generate_seed(){
@@ -19,18 +19,18 @@ Vector init_qubits(int n) {
         printf("ERRO: n deve ser positivo\n");
         return erro;
     }
- 
+
     // Um estado de n qubits tem 2^n amplitudes
     Vector state = create_vector(1 << n);
     if (state.values == NULL) {
         printf("ERRO: falha na alocação dinâmica\n");
         return erro;
     }
- 
+
     // |00...0> tem amplitude 1 no índice 0 (probabilidade 100% de medir 0)
     // create_vector já inicializa todos os valores com 0
     state.values[0] = complex_new(1.0, 0.0);
-    
+
     return state;
 }
 
@@ -48,30 +48,30 @@ void apply_gate(Vector *s, Matrix gate) {
         printf("ERRO: a porta deve ter dimensão 2^n x 2^n, com n = n_qubits\n");
         return;
     }
- 
+
     // Novo estado = porta * estado
     Vector result = matrix_vec_mul(gate, *s);
     free_matrix(&gate);
     if (result.values == NULL) {
-        printf("ERRO: falha na alocação dinâmica");    
+        printf("ERRO: falha na alocação dinâmica");
         return;
     }
 
     free_vector(s);
     *s = result;
 }
- 
+
 // Mede o estado sem colapsá-lo, retornando o índice do estado base observado
 int measure(const Vector *s) {
     if (s->values == NULL) return -1;
- 
+
     // Sorteia r em [0, 1)
     // Como 0 <= rand() <= RAND_MAX, dividir por RAND_MAX +1 garante que r < 1
     double r = rand() / ((double) RAND_MAX + 1.0);
- 
+
     double acumulado = 0.0;
     int ultimo_possivel = -1;
- 
+
     // Soma as probabilidades até ultrapassar r: o estado em que isso acontece é o medido
     for (int i = 0; i < s->len; i++) {
         double prob = complex_mod2(s->values[i]);
@@ -82,7 +82,7 @@ int measure(const Vector *s) {
 
         if (r < acumulado) return i;
     }
- 
+
     // Por erros de arredondamento, a soma de todas as probabilidades pode ser ligeiramente menor que 1;
     // assim, garante-se que essa função sempre retorne algum estado ao chegar nesse laço for
     return ultimo_possivel;
@@ -105,6 +105,6 @@ int *measure_shots(const Vector *state, int shots){
         // No índice do shot atual, soma o que foi medido
         result[measured]++;
     }
-    
+
     return result;
 }

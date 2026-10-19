@@ -1,9 +1,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/complex.h"
-#include "../include/linear_algebra.h"
-#include "../include/gates.h"
+#include "complex.h"
+#include "linear_algebra.h"
+#include "gates.h"
 
 Matrix expand_gate(int n, Matrix base){
     Matrix vazia = {NULL, 0, 0};
@@ -14,7 +14,7 @@ Matrix expand_gate(int n, Matrix base){
 
     //Cresce a matriz para n qubits com tensor product e a base
     Matrix resultado = copy_matrix(base);
-    
+
     for (int i = 0; i < n-1; i++){
         Matrix temp = tensor_product_matrix(resultado, base);
         free_matrix(&resultado); //Evita vazamento de memória
@@ -34,7 +34,7 @@ Matrix get_identity(int n){
     if (base.values == NULL) return vazia;
 
     //Define os valores da base 2x2
-    base.values[0][0] = complex_new(1.0, 0.0); 
+    base.values[0][0] = complex_new(1.0, 0.0);
     base.values[1][1] = complex_new(1.0, 0.0);
 
     //Retorna a matriz expandida para n quibits
@@ -50,9 +50,9 @@ Matrix get_hadamard(int n){
     if (base.values == NULL) return vazia;
 
     //Define os valores da matriz base 2x2
-    base.values[0][0] = complex_new(1.0 / pow(2, 0.5), 0.0); 
-    base.values[0][1] = complex_new(1.0 / pow(2, 0.5), 0.0); 
-    base.values[1][0] = complex_new(1.0 / pow(2, 0.5), 0.0); 
+    base.values[0][0] = complex_new(1.0 / pow(2, 0.5), 0.0);
+    base.values[0][1] = complex_new(1.0 / pow(2, 0.5), 0.0);
+    base.values[1][0] = complex_new(1.0 / pow(2, 0.5), 0.0);
     base.values[1][1] = complex_new(-1.0 / pow(2, 0.5), 0.0);
 
     //Retorna a matriz expandida para n quibits
@@ -68,9 +68,9 @@ Matrix get_rotateX(int n, float theta){
     if (base.values == NULL) return vazia;
 
     //Define os valores da matriz base 2x2
-    base.values[0][0] = complex_new(cos(theta/2), 0.0); 
-    base.values[0][1] = complex_new(0.0, -sin(theta/2)); 
-    base.values[1][0] = complex_new(0.0, -sin(theta/2)); 
+    base.values[0][0] = complex_new(cos(theta/2), 0.0);
+    base.values[0][1] = complex_new(0.0, -sin(theta/2));
+    base.values[1][0] = complex_new(0.0, -sin(theta/2));
     base.values[1][1] = complex_new(cos(theta/2), 0.0);
 
     //Retorna a matriz expandida para n quibits
@@ -100,9 +100,9 @@ Matrix get_rotateY(int n, float theta){
     if (base.values == NULL) return vazia;
 
     //Define os valores da matriz base 2x2
-    base.values[0][0] = complex_new(cos(theta/2), 0.0); 
-    base.values[0][1] = complex_new(-sin(theta/2), 0.0); 
-    base.values[1][0] = complex_new(sin(theta/2), 0.0); 
+    base.values[0][0] = complex_new(cos(theta/2), 0.0);
+    base.values[0][1] = complex_new(-sin(theta/2), 0.0);
+    base.values[1][0] = complex_new(sin(theta/2), 0.0);
     base.values[1][1] = complex_new(cos(theta/2), 0.0);
 
     //Retorna a matriz expandida para n quibits
@@ -131,9 +131,9 @@ Matrix get_rotateZ(int n, float theta){
     if (base.values == NULL) return vazia;
 
     //Define os valores da matriz base 2x2
-    base.values[0][0] = complex_new(cos(theta / 2), -sin(theta / 2)); 
-    base.values[0][1] = complex_new(0.0, 0.0); 
-    base.values[1][0] = complex_new(0.0, 0.0); 
+    base.values[0][0] = complex_new(cos(theta / 2), -sin(theta / 2));
+    base.values[0][1] = complex_new(0.0, 0.0);
+    base.values[1][0] = complex_new(0.0, 0.0);
     base.values[1][1] = complex_new(cos(theta / 2), sin(theta / 2));
 
     //Retorna a matriz expandida para n quibits

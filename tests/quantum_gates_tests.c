@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
-#include "../include/gates.h"
+#include "gates.h"
 
 //Função para verificar se as matrizes são iguais na medida do possível
 int check_matrix(Matrix a, Matrix b){
@@ -15,7 +15,7 @@ int check_matrix(Matrix a, Matrix b){
             double diferencaIm = a.values[i][j].im - b.values[i][j].im;
             if (diferencaRe < 0) diferencaRe = -diferencaRe; //módulo ds difenreça
             if (diferencaIm < 0) diferencaIm = -diferencaIm; //módulo ds difenreça
-            
+
             if (diferencaRe > 0.00001 || diferencaIm > 0.00001) { //se a diferença for muito grande, diferentes
                 return 0;
             }
@@ -31,7 +31,7 @@ void test_expand_gate(void){
     base.values[0][1] = complex_new(5.0, 0.0);
     base.values[1][0] = complex_new(1.0, 2.0);
     base.values[1][1] = complex_new(4.0, 0.0);
-    
+
     //Teste caso inválido, n <= 0
     Matrix resultado = expand_gate(0, copy_matrix(base));
     assert(resultado.values == NULL);
@@ -85,7 +85,7 @@ void test_get_identity(void){
     free_matrix(&resultado);
     free_matrix(&expected);
 
-    //Caso genérico, n = 2 
+    //Caso genérico, n = 2
     expected = create_matrix(4, 4);
     for (int i = 0; i < 4; i++) {
         expected.values[i][i] = complex_new(1.0, 0.0);
